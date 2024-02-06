@@ -2,13 +2,14 @@
 """
 `sword2` logging
 """
-import imp
+import importlib.util
 import logging.config
 import os
 
+
 try:
-    _, sword2_path, _ = imp.find_module("sword2")
-except ImportError:
+    sword2_path = importlib.util.find_spec("sword2").submodule_search_locations[0]
+except (AttributeError, IndexError):
     sword2_path = ""
 SWORD2_LOGGING_CONFIG = os.path.join(
     sword2_path, "data", "sword2_logging.conf"
