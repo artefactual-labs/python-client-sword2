@@ -1,7 +1,11 @@
 import uuid
-from . import TestController
-from sword2 import Connection, Entry, Error_Document, Atom_Sword_Statement, Ore_Sword_Statement
+
 from lxml import etree
+
+from . import TestController
+from sword2 import Connection
+from sword2 import Entry
+from sword2 import Ore_Sword_Statement
 
 PACKAGE = "tests/databank/example.zip"
 PACKAGE_MIME = "application/zip"
@@ -13,25 +17,25 @@ SSS_OBO = "obo"
 DC = "{http://purl.org/dc/terms/}"
 RDF = "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}"
 
+
 class TestConnection(TestController):
-    
     def test_01_get_service_document(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
         conn.get_service_document()
-        
+
         # given that the client is fully functional, testing that the
         # service document parses and is valid is sufficient.  This, obviously,
         # doesn't test the validation routine itself.
         assert conn.sd != None
         assert conn.sd.parsed == True
-        assert conn.sd.valid == True 
+        assert conn.sd.valid == True
         assert len(conn.sd.workspaces) == 1
-    
+
     def test_02_get_service_document_unauthorised(self):
         conn = Connection(SSS_URL, user_name="alsdkfjsdz", user_pass="ZAKJKLASJDF")
         conn.get_service_document()
         assert conn.sd is None
-    
+
     """
     def test_03_basic_create_resource_with_package(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -52,7 +56,7 @@ class TestConnection(TestController):
         assert receipt.dom is None or receipt.parsed == True
         assert receipt.dom is None or receipt.valid == True
     """
-    
+
     """ 
     def test_04_advanced_create_resource_with_package(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW, on_behalf_of=SSS_OBO)
@@ -75,7 +79,7 @@ class TestConnection(TestController):
         assert receipt.dom is None or receipt.parsed == True
         assert receipt.dom is None or receipt.valid == True
     """
-    
+
     """ 
     def test_05_basic_create_resource_with_multipart(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -98,7 +102,7 @@ class TestConnection(TestController):
         assert receipt.dom is None or receipt.parsed == True
         assert receipt.dom is None or receipt.valid == True
     """
-    
+
     """
     def test_06_advanced_create_resource_with_multipart(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW, on_behalf_of=SSS_OBO)
@@ -123,42 +127,54 @@ class TestConnection(TestController):
         assert receipt.dom is None or receipt.parsed == True
         assert receipt.dom is None or receipt.valid == True
     """
-    
+
     def test_07_basic_create_resource_with_entry(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
         conn.get_service_document()
         col = conn.sd.workspaces[0][1][0]
-        e = Entry(title="An entry only deposit", id="asidjasidj", dcterms_abstract="abstract", dcterms_identifier="http://whatever/")
-        receipt = conn.create(col_iri = col.href,
-                    metadata_entry = e)
-                        
+        e = Entry(
+            title="An entry only deposit",
+            id="asidjasidj",
+            dcterms_abstract="abstract",
+            dcterms_identifier="http://whatever/",
+        )
+        receipt = conn.create(col_iri=col.href, metadata_entry=e)
+
         assert receipt.code == 201
         assert receipt.location != None
-        
-        # these last two assertions are contingent on if we actually get a 
+
+        # these last two assertions are contingent on if we actually get a
         # receipt back from the server (which we might not legitimately get)
         assert receipt.dom is None or receipt.parsed == True
         assert receipt.dom is None or receipt.valid == True
 
     def test_08_advanced_create_resource_with_entry(self):
-        conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW, on_behalf_of=SSS_OBO)
+        conn = Connection(
+            SSS_URL, user_name=SSS_UN, user_pass=SSS_PW, on_behalf_of=SSS_OBO
+        )
         conn.get_service_document()
         col = conn.sd.workspaces[0][1][0]
-        
-        e = Entry(title="An entry only deposit", id="asidjasidj", 
-                    dcterms_abstract="abstract", dcterms_identifier="http://whatever/")
+
+        e = Entry(
+            title="An entry only deposit",
+            id="asidjasidj",
+            dcterms_abstract="abstract",
+            dcterms_identifier="http://whatever/",
+        )
         e.register_namespace("oxds", "http://databank.ox.ac.uk/terms/")
         e.add_field("oxds_whatever", "whatever")
-        
-        receipt = conn.create(col_iri = col.href,
-                    metadata_entry = e,
-                    in_progress = True,
-                    suggested_identifier = str(uuid.uuid4()))
-        
+
+        receipt = conn.create(
+            col_iri=col.href,
+            metadata_entry=e,
+            in_progress=True,
+            suggested_identifier=str(uuid.uuid4()),
+        )
+
         assert receipt.code == 201
         assert receipt.location != None
-        
-        # these last two assertions are contingent on if we actually get a 
+
+        # these last two assertions are contingent on if we actually get a
         # receipt back from the server (which we might not legitimately get)
         assert receipt.dom is None or receipt.parsed == True
         assert receipt.dom is None or receipt.valid == True
@@ -167,63 +183,77 @@ class TestConnection(TestController):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
         conn.get_service_document()
         col = conn.sd.workspaces[0][1][0]
-        e = Entry(title="An entry only deposit", id="asidjasidj", dcterms_abstract="abstract", dcterms_identifier="http://whatever/")
-        receipt = conn.create(col_iri = col.href, metadata_entry = e)
-        
+        e = Entry(
+            title="An entry only deposit",
+            id="asidjasidj",
+            dcterms_abstract="abstract",
+            dcterms_identifier="http://whatever/",
+        )
+        receipt = conn.create(col_iri=col.href, metadata_entry=e)
+
         # we're going to work with the location
         assert receipt.location != None
-        
+
         new_receipt = conn.get_deposit_receipt(receipt.location)
-        
+
         assert new_receipt.code == 200
         assert new_receipt.parsed == True
         assert new_receipt.valid == True
-        
+
     def test_10_advanced_retrieve_deposit_receipt(self):
-        conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW, on_behalf_of=SSS_OBO)
+        conn = Connection(
+            SSS_URL, user_name=SSS_UN, user_pass=SSS_PW, on_behalf_of=SSS_OBO
+        )
         conn.get_service_document()
         col = conn.sd.workspaces[0][1][0]
         suggested_id = str(uuid.uuid4())
-        e = Entry(title="An entry only deposit", id="asidjasidj", dcterms_abstract="abstract", dcterms_identifier="http://whatever/")
-        receipt = conn.create(col_iri = col.href, metadata_entry = e, 
-                        in_progress = True,
-                        suggested_identifier = suggested_id)
-        
+        e = Entry(
+            title="An entry only deposit",
+            id="asidjasidj",
+            dcterms_abstract="abstract",
+            dcterms_identifier="http://whatever/",
+        )
+        receipt = conn.create(
+            col_iri=col.href,
+            metadata_entry=e,
+            in_progress=True,
+            suggested_identifier=suggested_id,
+        )
+
         # we're going to work with the location
         assert receipt.location != None
-        
+
         new_receipt = conn.get_deposit_receipt(receipt.location)
-        
+
         assert new_receipt.code == 200
         assert new_receipt.parsed == True
         assert new_receipt.valid == True
-        
+
         print(new_receipt.to_xml())
-        
+
         # Here are some more things we can know about the receipt
         # 1 - the links will all contain the suggested identifier
         # 2 - the links will all contain the name of the silo
         # 3 - the packaging will contain DataBankBagIt
         # 4 - the DC metadata will be reflected back at us
         # 5 - the atom metadata will be populated in some way
-        
+
         for rel, links in new_receipt.links.items():
             for link in links:
-                assert suggested_id in link['href']
-                assert col.title in link['href']
-            
+                assert suggested_id in link["href"]
+                assert col.title in link["href"]
+
         assert "http://dataflow.ox.ac.uk/package/DataBankBagIt" in new_receipt.packaging
-        
+
         # check the atom metadata
         assert new_receipt.title == "An entry only deposit"
         assert new_receipt.summary == "abstract"
-        
+
         # check the DC metadata
         assert "An entry only deposit" in new_receipt.metadata["dcterms_title"]
         assert "abstract" in new_receipt.metadata["dcterms_abstract"]
         assert "http://whatever/" in new_receipt.metadata["dcterms_identifier"]
-            
-    
+
     """
     def test_11_basic_retrieve_content_cont_iri(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -247,7 +277,7 @@ class TestConnection(TestController):
         assert resource.code == 200
         assert resource.content is not None
     """
-    
+
     """
     def test_12_basic_retrieve_content_em_iri(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -271,7 +301,7 @@ class TestConnection(TestController):
         assert resource.code == 200
         assert resource.content is not None
     """
-    
+
     """
     def test_13_advanced_retrieve_content_em_iri(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -296,7 +326,7 @@ class TestConnection(TestController):
         assert resource.code == 200
         assert resource.content is not None
     """
-    
+
     """
     def test_14_error_retrieve_content_em_iri(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW,
@@ -320,7 +350,7 @@ class TestConnection(TestController):
         assert isinstance(response, Error_Document)
         assert response.error_href == "http://purl.org/net/sword/error/ErrorContent"
     """
-    
+
     """
     def test_15_retrieve_content_em_iri_as_feed(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -348,49 +378,65 @@ class TestConnection(TestController):
         # it.  This should give us an exception which will fail the test if not
         dom = etree.fromstring(response.content)
     """
-    
+
     def test_16_basic_replace_file_content(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
         conn.get_service_document()
         col = conn.sd.workspaces[0][1][0]
-        e = Entry(title="An entry only deposit", id="asidjasidj", dcterms_abstract="abstract", dcterms_identifier="http://whatever/")
-        receipt = conn.create(col_iri = col.href, metadata_entry = e)
-        
+        e = Entry(
+            title="An entry only deposit",
+            id="asidjasidj",
+            dcterms_abstract="abstract",
+            dcterms_identifier="http://whatever/",
+        )
+        receipt = conn.create(col_iri=col.href, metadata_entry=e)
+
         # ensure that we have a receipt (the server may not give us one
         # by default)
         receipt = conn.get_deposit_receipt(receipt.location)
-        
+
         # now do the replace
         with open(PACKAGE) as pkg:
-            new_receipt = conn.update(dr = receipt,
-                            payload=pkg,
-                            mimetype=PACKAGE_MIME,
-                            filename="update.zip",
-                            packaging='http://purl.org/net/sword/package/SimpleZip')
-        
+            new_receipt = conn.update(
+                dr=receipt,
+                payload=pkg,
+                mimetype=PACKAGE_MIME,
+                filename="update.zip",
+                packaging="http://purl.org/net/sword/package/SimpleZip",
+            )
+
         assert new_receipt.code == 204
         assert new_receipt.dom is None
-        
+
     def test_17_advanced_replace_file_content(self):
-        conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW, on_behalf_of=SSS_OBO)
+        conn = Connection(
+            SSS_URL, user_name=SSS_UN, user_pass=SSS_PW, on_behalf_of=SSS_OBO
+        )
         conn.get_service_document()
         col = conn.sd.workspaces[0][1][0]
-        e = Entry(title="An entry only deposit", id="asidjasidj", dcterms_abstract="abstract", dcterms_identifier="http://whatever/")
-        receipt = conn.create(col_iri = col.href, metadata_entry = e)
-        
+        e = Entry(
+            title="An entry only deposit",
+            id="asidjasidj",
+            dcterms_abstract="abstract",
+            dcterms_identifier="http://whatever/",
+        )
+        receipt = conn.create(col_iri=col.href, metadata_entry=e)
+
         # ensure that we have a receipt (the server may not give us one
         # by default)
         receipt = conn.get_deposit_receipt(receipt.location)
-        
+
         # now do the replace
         with open(PACKAGE) as pkg:
-            new_receipt = conn.update(dr = receipt,
-                            payload=pkg,
-                            mimetype=PACKAGE_MIME,
-                            filename="update.zip",
-                            packaging='http://purl.org/net/sword/package/SimpleZip',
-                            metadata_relevant=True)
-        
+            new_receipt = conn.update(
+                dr=receipt,
+                payload=pkg,
+                mimetype=PACKAGE_MIME,
+                filename="update.zip",
+                packaging="http://purl.org/net/sword/package/SimpleZip",
+                metadata_relevant=True,
+            )
+
         assert new_receipt.code == 204
         assert new_receipt.dom is None
 
@@ -417,7 +463,7 @@ class TestConnection(TestController):
             assert new_receipt.parsed == True
             assert new_receipt.valid == True
     """
-    
+
     """
     def test_19_advanced_replace_metadata(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW, on_behalf_of=SSS_OBO)
@@ -441,7 +487,7 @@ class TestConnection(TestController):
             assert new_receipt.parsed == True
             assert new_receipt.valid == True
     """
-    
+
     """
     def test_20_basic_replace_with_multipart(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -762,7 +808,7 @@ class TestConnection(TestController):
         # FIXME: this is the broken assert
         #assert another_receipt.code == 404
     """
-    
+
     """
     def test_32_get_atom_statement(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW, on_behalf_of=SSS_OBO)
@@ -789,37 +835,44 @@ class TestConnection(TestController):
         
         assert isinstance(statement, Atom_Sword_Statement)
     """
-    
+
     def test_33_get_ore_statement(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
         conn.get_service_document()
         col = conn.sd.workspaces[0][1][0]
-        e = Entry(title="An entry only deposit", id="asidjasidj", dcterms_abstract="abstract", dcterms_identifier="http://whatever/")
-        receipt = conn.create(col_iri = col.href, metadata_entry = e)
+        e = Entry(
+            title="An entry only deposit",
+            id="asidjasidj",
+            dcterms_abstract="abstract",
+            dcterms_identifier="http://whatever/",
+        )
+        receipt = conn.create(col_iri=col.href, metadata_entry=e)
         with open(PACKAGE) as pkg:
-            new_receipt = conn.update(dr = receipt,
-                            payload=pkg,
-                            mimetype=PACKAGE_MIME,
-                            filename="update.zip",
-                            packaging='http://purl.org/net/sword/package/SimpleZip')
-        
+            new_receipt = conn.update(
+                dr=receipt,
+                payload=pkg,
+                mimetype=PACKAGE_MIME,
+                filename="update.zip",
+                packaging="http://purl.org/net/sword/package/SimpleZip",
+            )
+
         # ensure that we have a receipt (the server may not give us one
         # by default)
         receipt = conn.get_deposit_receipt(receipt.location)
-        
+
         assert receipt.ore_statement_iri is not None
-        
+
         # get the statement
         statement = conn.get_ore_sword_statement(receipt.ore_statement_iri)
-        
+
         assert isinstance(statement, Ore_Sword_Statement)
-        
+
         # some specific things that we can assert about the Statement
         # 1 - it should have the original deposits listed
         # 2 - it should have the aggregated resources listed
         # 3 - it should have the correct state
         # 4 - the dom should contain all the relevant metadata
-        
+
         # check the original deposits
         od_uri = None
         assert len(statement.original_deposits) == 1
@@ -830,19 +883,19 @@ class TestConnection(TestController):
             # assert od.deposited_by == SSS_UN # FIXME: this may not work until we get auth sorted out
             assert od.deposited_on_behalf_of is None
             od_uri = od.uri
-        
+
         # check the aggregated resources
         assert len(statement.resources) == 1
         for ar in statement.resources:
             # should be the same resource
             assert od_uri == ar.uri
-        
+
         # check the states
         assert len(statement.states) == 1
         assert statement.states[0][0] == "http://databank.ox.ac.uk/state/ZipFileAdded"
-        
+
         print(etree.tostring(statement.dom, pretty_print=True))
-        
+
         # check the metadata
         md_count = 0
         for e in statement.dom.findall(RDF + "Description"):
@@ -855,10 +908,14 @@ class TestConnection(TestController):
                     md_count += 1
                 elif element.tag == DC + "identifier":
                     resource = element.attrib.get(RDF + "resource", None)
-                    if resource is not None: # because we know that there is going to be more than one identifier
-                        assert element.attrib.get(RDF + "resource") == "http://whatever/"
+                    if (
+                        resource is not None
+                    ):  # because we know that there is going to be more than one identifier
+                        assert (
+                            element.attrib.get(RDF + "resource") == "http://whatever/"
+                        )
                         md_count += 1
-                
+
         print("Metadata Count: " + str(md_count))
         assert md_count == 3
 
@@ -866,8 +923,13 @@ class TestConnection(TestController):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
         conn.get_service_document()
         col = conn.sd.workspaces[0][1][0]
-        e = Entry(title="An entry only deposit", id="asidjasidj", dcterms_abstract="abstract", dcterms_identifier="http://whatever/")
-        receipt = conn.create(col_iri = col.href, metadata_entry = e)
+        e = Entry(
+            title="An entry only deposit",
+            id="asidjasidj",
+            dcterms_abstract="abstract",
+            dcterms_identifier="http://whatever/",
+        )
+        receipt = conn.create(col_iri=col.href, metadata_entry=e)
         statement = conn.get_ore_sword_statement(receipt.ore_statement_iri)
 
         assert len(statement.states) == 1
@@ -877,42 +939,58 @@ class TestConnection(TestController):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
         conn.get_service_document()
         col = conn.sd.workspaces[0][1][0]
-        e = Entry(title="An entry only deposit", id="asidjasidj", dcterms_abstract="abstract", dcterms_identifier="http://whatever/")
-        receipt = conn.create(col_iri = col.href, metadata_entry = e)
+        e = Entry(
+            title="An entry only deposit",
+            id="asidjasidj",
+            dcterms_abstract="abstract",
+            dcterms_identifier="http://whatever/",
+        )
+        receipt = conn.create(col_iri=col.href, metadata_entry=e)
         with open(PACKAGE) as pkg:
-            new_receipt = conn.update(dr = receipt,
-                            payload=pkg,
-                            mimetype=PACKAGE_MIME,
-                            filename="update.zip",
-                            packaging='http://purl.org/net/sword/package/SimpleZip')
+            new_receipt = conn.update(
+                dr=receipt,
+                payload=pkg,
+                mimetype=PACKAGE_MIME,
+                filename="update.zip",
+                packaging="http://purl.org/net/sword/package/SimpleZip",
+            )
         statement = conn.get_ore_sword_statement(receipt.ore_statement_iri)
-        
+
         assert len(statement.states) == 1
         assert statement.states[0][0] == "http://databank.ox.ac.uk/state/ZipFileAdded"
-        
+
     def test_36_check_md5(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
         conn.get_service_document()
         col = conn.sd.workspaces[0][1][0]
-        e = Entry(title="An entry only deposit", id="asidjasidj", dcterms_abstract="abstract", dcterms_identifier="http://whatever/")
-        receipt = conn.create(col_iri = col.href, metadata_entry = e)
+        e = Entry(
+            title="An entry only deposit",
+            id="asidjasidj",
+            dcterms_abstract="abstract",
+            dcterms_identifier="http://whatever/",
+        )
+        receipt = conn.create(col_iri=col.href, metadata_entry=e)
         with open(PACKAGE) as pkg:
-            new_receipt = conn.update(dr = receipt,
-                            payload=pkg,
-                            mimetype=PACKAGE_MIME,
-                            filename="update.zip",
-                            packaging='http://purl.org/net/sword/package/SimpleZip',
-                            md5sum="123456789") # pass in a known md5 (even though it is wrong)
+            new_receipt = conn.update(
+                dr=receipt,
+                payload=pkg,
+                mimetype=PACKAGE_MIME,
+                filename="update.zip",
+                packaging="http://purl.org/net/sword/package/SimpleZip",
+                md5sum="123456789",
+            )  # pass in a known md5 (even though it is wrong)
         statement = conn.get_ore_sword_statement(receipt.ore_statement_iri)
-        
+
         # need to try and extract the md5 from the dom
         count = 0
-        for element in statement.dom.findall("{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description/{http://vocab.ox.ac.uk/dataset/schema#}hasMD5"):
+        for element in statement.dom.findall(
+            "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description/{http://vocab.ox.ac.uk/dataset/schema#}hasMD5"
+        ):
             count += 1
             assert element.text.strip() == "123456789"
-        
+
         assert count == 1
-        
+
     # FIXME: when we do the full swordv2 implementation, we need to do a number of
     # checks to ensure that metadata and content states are properly treated
 
@@ -1009,58 +1087,3 @@ class TestConnection(TestController):
         # this is a placeholder; it's not possible to reliably test for this
         pass
     """
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

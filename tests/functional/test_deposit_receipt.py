@@ -1,7 +1,5 @@
 from . import TestController
-
 from sword2.deposit_receipt import Deposit_Receipt
-from sword2.utils import NS
 
 DR = """<?xml version="1.0" ?>
 <entry xmlns:dcterms="http://purl.org/dc/terms/"
@@ -64,30 +62,33 @@ DR = """<?xml version="1.0" ?>
 
 </entry>"""
 
+
 class TestDepositReceipt(TestController):
     def test_01_init(self):
         dr = Deposit_Receipt(DR)
-        assert dr.metadata['dcterms_title'][0] == "Title", dr.metadata['dcterms_title']
-        assert dr.metadata['atom_id'][0] == "info:something:1"
+        assert dr.metadata["dcterms_title"][0] == "Title", dr.metadata["dcterms_title"]
+        assert dr.metadata["atom_id"][0] == "info:something:1"
         assert dr.id == "info:something:1"
         assert dr.title == "My Deposit"
-        assert dr.metadata['sword_verboseDescription'][0] == "Verbose description"
-        
+        assert dr.metadata["sword_verboseDescription"][0] == "Verbose description"
+
     def test_02_edit(self):
         dr = Deposit_Receipt(DR)
         assert dr.edit == "http://www.swordserver.ac.uk/col1/mydeposit.atom"
         assert dr.edit_media == "http://www.swordserver.ac.uk/col1/mydeposit"
-        
+
     def test_03_content_iri(self):
         dr = Deposit_Receipt(DR)
         assert dr.edit == "http://www.swordserver.ac.uk/col1/mydeposit.atom"
         assert "http://www.swordserver.ac.uk/col1/mydeposit" in list(dr.content.keys())
-        assert dr.content["http://www.swordserver.ac.uk/col1/mydeposit"]['type'] == "application/zip"
+        assert (
+            dr.content["http://www.swordserver.ac.uk/col1/mydeposit"]["type"]
+            == "application/zip"
+        )
         # Check convenience attribute 'cont_iri'
         assert dr.cont_iri == "http://www.swordserver.ac.uk/col1/mydeposit"
-        
+
     def test_04_packaging(self):
         dr = Deposit_Receipt(DR)
         assert "http://purl.org/net/sword/package/BagIt" in dr.packaging
         assert len(dr.packaging) == 1
-    

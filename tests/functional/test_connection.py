@@ -1,10 +1,7 @@
-import json
-
 from . import TestController
-
 from sword2 import Connection
 
-long_service_doc = '''<?xml version="1.0" ?>
+long_service_doc = """<?xml version="1.0" ?>
 <service xmlns:dcterms="http://purl.org/dc/terms/"
     xmlns:sword="http://purl.org/net/sword/terms/"
     xmlns:atom="http://www.w3.org/2005/Atom"
@@ -57,7 +54,8 @@ long_service_doc = '''<?xml version="1.0" ?>
             <sword:acceptPackaging>http://purl.org/net/sword/package/SimpleZip</sword:acceptPackaging>
         </collection>
     </workspace>
-</service>'''
+</service>"""
+
 
 class TestConnection(TestController):
     def test_01_blank_init(self):
@@ -76,7 +74,7 @@ class TestConnection(TestController):
         assert conn.sd.workspaces[0][0] == "Main Site"
         assert conn.sd.workspaces[1][0] == "Sub-site"
         assert len(conn.sd.workspaces[1][1]) == 2
-        
+
     def test_03_init_then_load_from_string_t_history(self):
         conn = Connection("http://example.org/service-doc")
         assert conn.sd_iri == "http://example.org/service-doc"
@@ -84,5 +82,5 @@ class TestConnection(TestController):
         conn.load_service_document(long_service_doc)
         # Should have made a two client 'transactions', the init and subsequent XML load
         assert len(conn.history) == 2
-        assert conn.history[0]['type'] == "init"
-        assert conn.history[1]['type'] == "SD Parse"
+        assert conn.history[0]["type"] == "init"
+        assert conn.history[1]["type"] == "SD Parse"
