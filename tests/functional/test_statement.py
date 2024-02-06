@@ -71,8 +71,8 @@ class TestStatement(TestController):
         assert len(s.original_deposits) == 0
         assert len(s.resources) == 0
         assert len(s.states) == 0
-        assert s.xml_document == None
-        assert s.dom == None
+        assert s.xml_document is None
+        assert s.dom is None
         assert not s.parsed
         assert not s.valid
 
@@ -82,8 +82,8 @@ class TestStatement(TestController):
         assert len(s.states) == 1
         assert len(s.original_deposits) == 1
         assert len(s.resources) == 1
-        assert s.xml_document != None
-        assert s.dom != None
+        assert s.xml_document is not None
+        assert s.dom is not None
         assert s.parsed
         assert s.valid
 
@@ -109,8 +109,8 @@ class TestStatement(TestController):
         assert len(s.original_deposits) == 0
         assert len(s.resources) == 0
         assert len(s.states) == 0
-        assert s.xml_document == None
-        assert s.dom == None
+        assert s.xml_document is None
+        assert s.dom is None
         assert not s.parsed
         assert not s.valid
 
@@ -120,8 +120,8 @@ class TestStatement(TestController):
         assert len(s.states) == 1
         assert len(s.original_deposits) == 1
         assert len(s.resources) == 1
-        assert s.xml_document != None
-        assert s.dom != None
+        assert s.xml_document is not None
+        assert s.dom is not None
         assert s.parsed
         assert s.valid
 

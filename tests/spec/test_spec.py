@@ -26,9 +26,9 @@ class TestConnection(TestController):
         # given that the client is fully functional, testing that the
         # service document parses and is valid is sufficient.  This, obviously,
         # doesn't test the validation routine itself.
-        assert conn.sd != None
-        assert conn.sd.parsed == True
-        assert conn.sd.valid == True
+        assert conn.sd is not None
+        assert conn.sd.parsed is True
+        assert conn.sd.valid is True
         assert len(conn.sd.workspaces) == 1
 
     def test_02_get_service_document_on_behalf_of(self):
@@ -40,9 +40,9 @@ class TestConnection(TestController):
         # given that the client is fully functional, testing that the
         # service document parses and is valid is sufficient.  This, obviously,
         # doesn't test the validation routine itself.
-        assert conn.sd != None
-        assert conn.sd.parsed == True
-        assert conn.sd.valid == True
+        assert conn.sd is not None
+        assert conn.sd.parsed is True
+        assert conn.sd.valid is True
         assert len(conn.sd.workspaces) == 1
 
     def test_03_basic_create_resource_with_package(self):
@@ -59,12 +59,12 @@ class TestConnection(TestController):
             )
 
         assert receipt.code == 201
-        assert receipt.location != None
+        assert receipt.location is not None
 
         # these last two assertions are contingent on if we actually get a
         # receipt back from the server (which we might not legitimately get)
-        assert receipt.dom is None or receipt.parsed == True
-        assert receipt.dom is None or receipt.valid == True
+        assert receipt.dom is None or receipt.parsed is True
+        assert receipt.dom is None or receipt.valid is True
 
     def test_04_advanced_create_resource_with_package(self):
         conn = Connection(
@@ -84,12 +84,12 @@ class TestConnection(TestController):
             )
 
         assert receipt.code == 201
-        assert receipt.location != None
+        assert receipt.location is not None
 
         # these last two assertions are contingent on if we actually get a
         # receipt back from the server (which we might not legitimately get)
-        assert receipt.dom is None or receipt.parsed == True
-        assert receipt.dom is None or receipt.valid == True
+        assert receipt.dom is None or receipt.parsed is True
+        assert receipt.dom is None or receipt.valid is True
 
     def test_05_basic_create_resource_with_multipart(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -112,12 +112,12 @@ class TestConnection(TestController):
             )
 
         assert receipt.code == 201
-        assert receipt.location != None
+        assert receipt.location is not None
 
         # these last two assertions are contingent on if we actually get a
         # receipt back from the server (which we might not legitimately get)
-        assert receipt.dom is None or receipt.parsed == True
-        assert receipt.dom is None or receipt.valid == True
+        assert receipt.dom is None or receipt.parsed is True
+        assert receipt.dom is None or receipt.valid is True
 
     def test_06_advanced_create_resource_with_multipart(self):
         conn = Connection(
@@ -144,12 +144,12 @@ class TestConnection(TestController):
             )
 
         assert receipt.code == 201
-        assert receipt.location != None
+        assert receipt.location is not None
 
         # these last two assertions are contingent on if we actually get a
         # receipt back from the server (which we might not legitimately get)
-        assert receipt.dom is None or receipt.parsed == True
-        assert receipt.dom is None or receipt.valid == True
+        assert receipt.dom is None or receipt.parsed is True
+        assert receipt.dom is None or receipt.valid is True
 
     def test_07_basic_create_resource_with_entry(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -164,12 +164,12 @@ class TestConnection(TestController):
         receipt = conn.create(col_iri=col.href, metadata_entry=e)
 
         assert receipt.code == 201
-        assert receipt.location != None
+        assert receipt.location is not None
 
         # these last two assertions are contingent on if we actually get a
         # receipt back from the server (which we might not legitimately get)
-        assert receipt.dom is None or receipt.parsed == True
-        assert receipt.dom is None or receipt.valid == True
+        assert receipt.dom is None or receipt.parsed is True
+        assert receipt.dom is None or receipt.valid is True
 
     def test_08_advanced_create_resource_with_entry(self):
         conn = Connection(
@@ -191,12 +191,12 @@ class TestConnection(TestController):
         )
 
         assert receipt.code == 201
-        assert receipt.location != None
+        assert receipt.location is not None
 
         # these last two assertions are contingent on if we actually get a
         # receipt back from the server (which we might not legitimately get)
-        assert receipt.dom is None or receipt.parsed == True
-        assert receipt.dom is None or receipt.valid == True
+        assert receipt.dom is None or receipt.parsed is True
+        assert receipt.dom is None or receipt.valid is True
 
     def test_09_basic_retrieve_deposit_receipt(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -212,13 +212,13 @@ class TestConnection(TestController):
             )
 
         # we're going to work with the location
-        assert receipt.location != None
+        assert receipt.location is not None
 
         new_receipt = conn.get_deposit_receipt(receipt.location)
 
         assert new_receipt.code == 200
-        assert new_receipt.parsed == True
-        assert new_receipt.valid == True
+        assert new_receipt.parsed is True
+        assert new_receipt.valid is True
 
     def test_10_advanced_retrieve_deposit_receipt(self):
         conn = Connection(
@@ -238,13 +238,13 @@ class TestConnection(TestController):
             )
 
         # we're going to work with the location
-        assert receipt.location != None
+        assert receipt.location is not None
 
         new_receipt = conn.get_deposit_receipt(receipt.location)
 
         assert new_receipt.code == 200
-        assert new_receipt.parsed == True
-        assert new_receipt.valid == True
+        assert new_receipt.parsed is True
+        assert new_receipt.valid is True
 
     def test_11_basic_retrieve_content_cont_iri(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -376,7 +376,7 @@ class TestConnection(TestController):
 
         # the response should be an xml document, so let's see if we can parse
         # it.  This should give us an exception which will fail the test if not
-        dom = etree.fromstring(response.content)
+        etree.fromstring(response.content)
 
     def test_16_basic_replace_file_content(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -470,8 +470,8 @@ class TestConnection(TestController):
         if new_receipt.code == 204:
             assert new_receipt.dom is None
         if new_receipt.code == 200:
-            assert new_receipt.parsed == True
-            assert new_receipt.valid == True
+            assert new_receipt.parsed is True
+            assert new_receipt.valid is True
 
     def test_19_advanced_replace_metadata(self):
         conn = Connection(
@@ -504,8 +504,8 @@ class TestConnection(TestController):
         if new_receipt.code == 204:
             assert new_receipt.dom is None
         if new_receipt.code == 200:
-            assert new_receipt.parsed == True
-            assert new_receipt.valid == True
+            assert new_receipt.parsed is True
+            assert new_receipt.valid is True
 
     def test_20_basic_replace_with_multipart(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -552,8 +552,8 @@ class TestConnection(TestController):
         if new_receipt.code == 204:
             assert new_receipt.dom is None
         if new_receipt.code == 200:
-            assert new_receipt.parsed == True
-            assert new_receipt.valid == True
+            assert new_receipt.parsed is True
+            assert new_receipt.valid is True
 
     def test_21_advanced_replace_with_multipart(self):
         conn = Connection(
@@ -603,8 +603,8 @@ class TestConnection(TestController):
         if new_receipt.code == 204:
             assert new_receipt.dom is None
         if new_receipt.code == 200:
-            assert new_receipt.parsed == True
-            assert new_receipt.valid == True
+            assert new_receipt.parsed is True
+            assert new_receipt.valid is True
 
     def test_22_delete_content(self):
         conn = Connection(
@@ -795,7 +795,7 @@ class TestConnection(TestController):
             dcterms_abstract="abstract",
             dcterms_identifier="http://whatever/",
         )
-        with open(PACKAGE) as pkg:
+        with open(PACKAGE):
             receipt = conn.create(
                 col_iri=col.href,
                 metadata_entry=e,
@@ -968,7 +968,7 @@ class TestConnection(TestController):
         )
         conn.get_service_document()
         col = conn.sd.workspaces[0][1][0]
-        e = Entry(
+        Entry(
             title="Multipart deposit",
             id="asidjasidj",
             dcterms_abstract="abstract",
@@ -1002,7 +1002,7 @@ class TestConnection(TestController):
         )
         conn.get_service_document()
         col = conn.sd.workspaces[0][1][0]
-        e = Entry(
+        Entry(
             title="Multipart deposit",
             id="asidjasidj",
             dcterms_abstract="abstract",
@@ -1036,7 +1036,7 @@ class TestConnection(TestController):
         )
         conn.get_service_document()
         col = conn.sd.workspaces[0][1][0]
-        e = Entry(
+        Entry(
             title="Foo",
             id="asidjasidj",
             dcterms_abstract="abstract",

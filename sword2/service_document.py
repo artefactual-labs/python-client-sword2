@@ -129,7 +129,7 @@ class ServiceDocument:
 
         # Check for the first workspace for a collection element, just to make sure there is something there.
         test_workspace = self.service_dom.find(NS["app"] % "workspace")
-        if test_workspace != None:
+        if test_workspace is not None:
             sd_l.debug(
                 "At least one app:workspace found, with at least one app:collection within it."
             )

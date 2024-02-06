@@ -61,14 +61,14 @@ class TestConnection(TestController):
     def test_01_blank_init(self):
         conn = Connection("http://example.org/service-doc")
         assert conn.sd_iri == "http://example.org/service-doc"
-        assert conn.sd == None
+        assert conn.sd is None
 
     def test_02_init_then_load_from_string(self):
         conn = Connection("http://example.org/service-doc")
         assert conn.sd_iri == "http://example.org/service-doc"
-        assert conn.sd == None
+        assert conn.sd is None
         conn.load_service_document(long_service_doc)
-        assert conn.sd != None
+        assert conn.sd is not None
         assert len(conn.sd.workspaces) == 2
         assert len(conn.workspaces) == 2
         assert conn.sd.workspaces[0][0] == "Main Site"
@@ -78,7 +78,7 @@ class TestConnection(TestController):
     def test_03_init_then_load_from_string_t_history(self):
         conn = Connection("http://example.org/service-doc")
         assert conn.sd_iri == "http://example.org/service-doc"
-        assert conn.sd == None
+        assert conn.sd is None
         conn.load_service_document(long_service_doc)
         # Should have made a two client 'transactions', the init and subsequent XML load
         assert len(conn.history) == 2

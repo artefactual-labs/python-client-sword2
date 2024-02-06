@@ -54,7 +54,7 @@ class Category:
         self.scheme = scheme
         self.label = label
         self.text = text
-        if dom != None:
+        if dom is not None:
             self.dom = dom
             self._from_element(self.dom)
 
@@ -211,7 +211,7 @@ class Entry:
         if k in self.atom_fields:
             # These should be unique!
             old_e = self.entry.find(NS["atom"] % k)
-            if old_e == None:
+            if old_e is None:
                 e = etree.SubElement(
                     self.entry, NS["atom"] % k, nsmap=self.nsmap
                 )  # Notice we explicitly declare the nsmap

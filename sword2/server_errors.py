@@ -74,7 +74,7 @@ for k, v in SWORD2ERRORSBYNAME.items():
 def get_error(iri, code=None):
     sworderror_l.debug("Attempting to match %s to a known SWORD2 error IRI" % iri)
     if iri in list(SWORD2ERRORSBYIRI.keys()):
-        if code != None:
+        if code is not None:
             if code in SWORD2ERRORSBYIRI[iri]["codes"]:
                 sworderror_l.info(
                     "Matched '%s' to a known SWORD2 error IRI, and HTTP response code is one of the IRI's' expected response codes."

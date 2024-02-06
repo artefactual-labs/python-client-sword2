@@ -66,7 +66,7 @@ class Error_Document(Deposit_Receipt):
         if "sword_verboseDescription" in list(self.metadata.keys()):
             self.verbose_description = self.metadata["sword_verboseDescription"]
 
-        if self.dom != None:
+        if self.dom is not None:
             ed_l.debug("Error response contains document content")
             if "href" in list(self.dom.attrib.keys()):
                 self.error_href = self.dom.attrib["href"]

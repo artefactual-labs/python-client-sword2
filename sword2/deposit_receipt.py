@@ -148,13 +148,13 @@ class Deposit_Receipt:
                 d_l.error("Was not able to parse the deposit receipt as XML.")
                 return
 
-        elif dom != None:
+        elif dom is not None:
             self.dom = dom
             self.parsed = True
 
         # allow for the possibility that we are not given a body for the deposit
         # receipt (explicitly allowed by the spec)
-        if self.dom != None:
+        if self.dom is not None:
             # now validate the deposit receipt
             # Validation doesn't stop anything happening, it just lets the client
             # user know what to expect (note that Error_Document sub classes Deposit_Receipt
@@ -205,7 +205,7 @@ class Deposit_Receipt:
         # It MUST contain a single sword:treatment element [SWORD003] which contains either a human-readable
         # statement describing treatment the deposited resource has received or a IRI that dereferences to such a description.
         treatment = self.dom.findall(NS["sword"] % "treatment")
-        if treatment == None or len(treatment) == 0:
+        if treatment is None or len(treatment) == 0:
             d_l.debug(
                 "Validation Fail: no treatment or treatment invalid: " + str(treatment)
             )

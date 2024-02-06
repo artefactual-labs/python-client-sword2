@@ -138,7 +138,7 @@ class SDCollection:
         self.acceptPackaging = acceptPackaging
         self.service = service
         self.categories = categories
-        if dom != None:
+        if dom is not None:
             # Allow constructor variables to provide defaults, but information within the
             # XML element overwrites or appends.
             self.load_from_etree(dom)

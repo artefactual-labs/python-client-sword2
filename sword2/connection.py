@@ -1010,41 +1010,41 @@ class Connection:
         """
         target_iri = None
         request_type = "Update PUT"
-        if metadata_entry != None:
+        if metadata_entry is not None:
             metadata_relevant = True  # set this definitively, although the server shouldn't actually care
             # Metadata or Metadata + file --> Edit-IRI
             conn_l.info(
                 "Using the Edit-IRI - Metadata or Metadata + file multipart-related uses a PUT request to the Edit-IRI"
             )
-            if payload != None and filename != None:
+            if payload is not None and filename is not None:
                 request_type = "Update Multipart PUT"
             else:
                 request_type = "Update Metadata PUT"
-            if dr != None and dr.edit != None:
+            if dr is not None and dr.edit is not None:
                 conn_l.info(
                     "Using the deposit receipt to get the Edit-IRI: %s" % dr.edit
                 )
                 target_iri = dr.edit
-            elif edit_iri != None:
+            elif edit_iri is not None:
                 conn_l.info("Using the %s receipt as the Edit-IRI" % edit_iri)
                 target_iri = edit_iri
             else:
                 conn_l.error(
                     "Metadata or Metadata + file multipart-related update: Cannot find the Edit-IRI from the parameters supplied."
                 )
-        elif payload != None and filename != None:
+        elif payload is not None and filename is not None:
             # File-only --> Edit-Media-IRI
             conn_l.info(
                 "Using the Edit-Media-IRI - File update uses a PUT request to the Edit-Media-IRI"
             )
             request_type = "Update File PUT"
-            if dr != None and dr.edit_media != None:
+            if dr is not None and dr.edit_media is not None:
                 conn_l.info(
                     "Using the deposit receipt to get the Edit-Media-IRI: %s"
                     % dr.edit_media
                 )
                 target_iri = dr.edit_media
-            elif edit_media_iri != None:
+            elif edit_media_iri is not None:
                 conn_l.info(
                     "Using the %s receipt as the Edit-Media-IRI" % edit_media_iri
                 )
@@ -1054,7 +1054,7 @@ class Connection:
                     "File update: Cannot find the Edit-Media-IRI from the parameters supplied."
                 )
 
-        if target_iri == None:
+        if target_iri is None:
             raise Exception("No suitable IRI was found for the request needed.")
 
         return self._make_request(
@@ -1266,7 +1266,7 @@ class Connection:
         """
 
         if not se_iri:
-            if dr != None:
+            if dr is not None:
                 conn_l.info("Using the deposit receipt to get the SWORD2-Edit-IRI")
                 se_iri = dr.se_iri
                 if se_iri:
@@ -1350,7 +1350,7 @@ class Connection:
         and the correct IRI will automatically be chosen.
         """
         if not edit_media_iri:
-            if dr != None:
+            if dr is not None:
                 conn_l.info("Using the deposit receipt to get the Edit-Media-IRI")
                 edit_media_iri = dr.edit_media
                 if edit_media_iri:
@@ -1393,7 +1393,7 @@ class Connection:
 
         """
         if not edit_iri:
-            if dr != None:
+            if dr is not None:
                 conn_l.info("Using the deposit receipt to get the Edit-IRI")
                 edit_iri = dr.edit
                 if edit_iri:
@@ -1435,7 +1435,7 @@ class Connection:
         """
 
         if not se_iri:
-            if dr != None:
+            if dr is not None:
                 conn_l.info("Using the deposit receipt to get the SWORD2-Edit-IRI")
                 se_iri = dr.se_iri
                 if se_iri:
@@ -1533,7 +1533,7 @@ class Connection:
         response_headers, etc)
         """
         if not edit_media_iri:
-            if dr != None:
+            if dr is not None:
                 conn_l.info("Using the deposit receipt to get the Edit-Media-IRI")
                 edit_media_iri = dr.edit_media
                 if edit_media_iri:
@@ -1629,7 +1629,7 @@ class Connection:
         response_headers, etc)
         """
         if not edit_iri:
-            if dr != None:
+            if dr is not None:
                 conn_l.info("Using the deposit receipt to get the Edit-IRI")
                 edit_iri = dr.edit
                 if edit_iri:
@@ -1729,7 +1729,7 @@ class Connection:
         response_headers, etc)
         """
         if not edit_iri:
-            if dr != None:
+            if dr is not None:
                 conn_l.info("Using the deposit receipt to get the Edit-IRI")
                 edit_iri = dr.edit
                 if edit_iri:
@@ -1873,7 +1873,7 @@ class Connection:
 
         """
         if not content_iri:
-            if dr != None:
+            if dr is not None:
                 conn_l.info("Using the deposit receipt to get the SWORD2-Edit-IRI")
                 content_iri = dr.cont_iri
                 if content_iri:

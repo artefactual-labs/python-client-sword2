@@ -18,9 +18,9 @@ class TestEntry(TestController):
             dcterms_appendix="blah blah",
             dcterms_title="foo bar",
         )
-        assert e.entry.find(NS["atom"] % "title") != None
-        assert e.entry.find(NS["dcterms"] % "appendix") != None
-        assert e.entry.find(NS["dcterms"] % "nonexistant_term") == None
+        assert e.entry.find(NS["atom"] % "title") is not None
+        assert e.entry.find(NS["dcterms"] % "appendix") is not None
+        assert e.entry.find(NS["dcterms"] % "nonexistant_term") is None
 
     def test_03_init_with_author(self):
         e = Entry(
@@ -29,7 +29,7 @@ class TestEntry(TestController):
             dcterms_appendix="blah blah",
             author={"name": "Ben", "email": "foo@bar.com"},
         )
-        assert e.entry.find(NS["atom"] % "title") != None
+        assert e.entry.find(NS["atom"] % "title") is not None
         assert e.entry.find(NS["atom"] % "title").text == "Foo"
         a = e.entry.find(NS["atom"] % "author")
         name = a.find(NS["atom"] % "name")
@@ -53,7 +53,7 @@ class TestEntry(TestController):
             author={"name": "Ben", "email": "foo@bar.com"},
         )
         e.add_field("dcterms_issued", "2009")
-        assert e.entry.find(NS["dcterms"] % "issued") != None
+        assert e.entry.find(NS["dcterms"] % "issued") is not None
         assert e.entry.find(NS["dcterms"] % "issued").text == "2009"
 
     def test_06_init_add_fields(self):
@@ -69,11 +69,11 @@ class TestEntry(TestController):
             dcterms_description="A verbose and new description",
         )
 
-        assert e.entry.find(NS["atom"] % "updated") != None
+        assert e.entry.find(NS["atom"] % "updated") is not None
         assert e.entry.find(NS["atom"] % "updated").text == "2010"
-        assert e.entry.find(NS["dcterms"] % "issued") != None
+        assert e.entry.find(NS["dcterms"] % "issued") is not None
         assert e.entry.find(NS["dcterms"] % "issued").text == "2009"
-        assert e.entry.find(NS["dcterms"] % "description") != None
+        assert e.entry.find(NS["dcterms"] % "description") is not None
         assert (
             e.entry.find(NS["dcterms"] % "description").text
             == "A verbose and new description"
@@ -88,7 +88,7 @@ class TestEntry(TestController):
         )
         e.register_namespace("mylocal", "info:localnamespace")
         e.add_field("mylocal_issued", "2003")
-        assert e.entry.find(NS["mylocal"] % "issued") != None
+        assert e.entry.find(NS["mylocal"] % "issued") is not None
         assert e.entry.find(NS["mylocal"] % "issued").text == "2003"
 
     def test_08_init_add_new_ns_fields(self):
@@ -105,11 +105,11 @@ class TestEntry(TestController):
             mylocal_description="A verbose and new description",
         )
 
-        assert e.entry.find(NS["atom"] % "updated") != None
+        assert e.entry.find(NS["atom"] % "updated") is not None
         assert e.entry.find(NS["atom"] % "updated").text == "2010"
-        assert e.entry.find(NS["mylocal"] % "foobar") != None
+        assert e.entry.find(NS["mylocal"] % "foobar") is not None
         assert e.entry.find(NS["mylocal"] % "foobar").text == "2009"
-        assert e.entry.find(NS["mylocal"] % "description") != None
+        assert e.entry.find(NS["mylocal"] % "description") is not None
         assert (
             e.entry.find(NS["mylocal"] % "description").text
             == "A verbose and new description"

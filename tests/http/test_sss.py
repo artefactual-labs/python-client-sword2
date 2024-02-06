@@ -88,14 +88,14 @@ class TestConnection(TestController):
     def test_01_blank_init(self):
         conn = Connection("http://example.org/service-doc")
         assert conn.sd_iri == "http://example.org/service-doc"
-        assert conn.sd == None
+        assert conn.sd is None
 
     def test_02_init_then_load_from_string(self):
         conn = Connection("http://example.org/service-doc")
         assert conn.sd_iri == "http://example.org/service-doc"
-        assert conn.sd == None
+        assert conn.sd is None
         conn.load_service_document(long_service_doc)
-        assert conn.sd != None
+        assert conn.sd is not None
         assert len(conn.sd.workspaces) == 2
         assert len(conn.workspaces) == 2
         assert conn.sd.workspaces[0][0] == "Main Site"
@@ -105,7 +105,7 @@ class TestConnection(TestController):
     def test_03_init_then_load_from_string_t_history(self):
         conn = Connection("http://example.org/service-doc")
         assert conn.sd_iri == "http://example.org/service-doc"
-        assert conn.sd == None
+        assert conn.sd is None
         conn.load_service_document(long_service_doc)
         # Should have made a two client 'transactions', the init and subsequent XML load
         assert len(conn.history) == 2
@@ -119,11 +119,11 @@ class TestConnection(TestController):
             user_pass="sword",
         )
         assert conn.sd_iri == "http://localhost:%s/sd-uri" % PORT_NUMBER
-        assert conn.sd == None  # Not asked to get sd doc yet
+        assert conn.sd is None  # Not asked to get sd doc yet
         conn.get_service_document()
-        assert conn.sd != None
-        assert conn.sd.parsed == True
-        assert conn.sd.valid == True
+        assert conn.sd is not None
+        assert conn.sd.parsed is True
+        assert conn.sd.valid is True
         assert len(conn.sd.workspaces) == 1
 
     def test_05_init_from_sss(self):
@@ -134,9 +134,9 @@ class TestConnection(TestController):
             download_service_document=True,
         )
         assert conn.sd_iri == "http://localhost:%s/sd-uri" % PORT_NUMBER
-        assert conn.sd != None
-        assert conn.sd.parsed == True
-        assert conn.sd.valid == True
+        assert conn.sd is not None
+        assert conn.sd.parsed is True
+        assert conn.sd.valid is True
         assert len(conn.sd.workspaces) == 1
 
     def test_06_Simple_POST_to_sss(self):
@@ -190,7 +190,7 @@ class TestConnection(TestController):
             user_pass="sword",
             download_service_document=True,
         )
-        e = Entry(
+        Entry(
             title="Foo",
             id="asidjasidj",
             dcterms_appendix="blah blah",
@@ -235,7 +235,7 @@ class TestConnection(TestController):
             col_iri=conn.sd.workspaces[0][1][0].href,
             in_progress=True,
         )
-        assert resp != None
+        assert resp is not None
 
     def test_10_Multipart_POST_then_update_on_EM_IRI(self):
         conn = Connection(
@@ -259,7 +259,7 @@ class TestConnection(TestController):
             col_iri=conn.workspaces[0][1][0].href,
             in_progress=True,
         )
-        assert deposit_receipt.edit_media != None
+        assert deposit_receipt.edit_media is not None
         dr = conn.update(
             payload="Multipart_POST_then_update_on_EM_IRI  -- updated resource",
             mimetype="text/plain",
@@ -318,7 +318,7 @@ class TestConnection(TestController):
             collection=conn.sd.workspaces[0][1][0].title,
             in_progress=True,
         )
-        assert resp != None
+        assert resp is not None
 
     def test_13_Metadata_POST_to_sss_altering_entry(self):
         conn = Connection(
@@ -340,7 +340,7 @@ class TestConnection(TestController):
             collection=conn.sd.workspaces[0][1][0].title,
             in_progress=False,
         )
-        assert resp != None
+        assert resp is not None
 
     def test_14_Invalid_Packaging_cached_receipt(self):
         conn = Connection(
@@ -361,7 +361,7 @@ class TestConnection(TestController):
         )
         # Now to GET that resource with invalid packaging
         try:
-            content = conn.get_resource(dr.cont_iri, packaging="foofar")
+            conn.get_resource(dr.cont_iri, packaging="foofar")
             assert 1 == 0  # fail
         except PackagingFormatNotAvailable:
             # test the 'honour_receipts' flag and cached deposit
@@ -405,7 +405,7 @@ class TestConnection(TestController):
         )
         # Now to GET that resource with invalid packaging
         try:
-            content = conn.get_resource(dr.cont_iri, packaging="foofar")
+            conn.get_resource(dr.cont_iri, packaging="foofar")
             assert 1 == 0  # fail
         except PackagingFormatNotAvailable:
             # test the 'honour_receipts' flag and cached deposit
@@ -432,7 +432,7 @@ class TestConnection(TestController):
         # Now to GET that resource with no prescribed for packaging
         content_object = conn.get_resource(dr.cont_iri)
         # Can't guarantee that sss.py won't mangle submissions, so can't validate response at this moment
-        assert content_object != None
+        assert content_object is not None
 
     def test_18_Metadata_POST_to_se_iri(self):
         conn = Connection(
@@ -457,7 +457,7 @@ class TestConnection(TestController):
             in_progress=True,
         )
 
-        assert deposit_receipt.se_iri != None
+        assert deposit_receipt.se_iri is not None
         e.add_fields(dcterms_identifier="doi://somerubbish", dcterms_foo="blah blah")
         dr = conn.append(
             se_iri=deposit_receipt.se_iri, metadata_entry=e, in_progress=False
@@ -487,7 +487,7 @@ class TestConnection(TestController):
             in_progress=True,
         )
 
-        assert deposit_receipt.se_iri != None
+        assert deposit_receipt.se_iri is not None
         dr = conn.append(
             se_iri=deposit_receipt.se_iri,
             payload="Multipart_POST_then_appending_file_on_SE_IRI  -- updated resource",
@@ -520,7 +520,7 @@ class TestConnection(TestController):
             in_progress=True,
         )
 
-        assert deposit_receipt.se_iri != None
+        assert deposit_receipt.se_iri is not None
         e.add_fields(dcterms_identifier="doi://multipart_update_to_SE_IRI")
         dr = conn.append(
             se_iri=deposit_receipt.se_iri,
@@ -555,7 +555,7 @@ class TestConnection(TestController):
             col_iri=conn.sd.workspaces[0][1][0].href,
             in_progress=True,
         )
-        assert deposit_receipt.edit_media != None
+        assert deposit_receipt.edit_media is not None
         dr = conn.delete(resource_iri=deposit_receipt.edit_media)
         assert dr.code == 204 or dr.code == 200
 
@@ -581,7 +581,7 @@ class TestConnection(TestController):
             col_iri=conn.sd.workspaces[0][1][0].href,
             in_progress=True,
         )
-        assert deposit_receipt.edit != None
+        assert deposit_receipt.edit is not None
         dr = conn.delete(resource_iri=deposit_receipt.edit)
         assert dr.code == 204 or dr.code == 200
 
@@ -607,7 +607,7 @@ class TestConnection(TestController):
             col_iri=conn.sd.workspaces[0][1][0].href,
             in_progress=True,
         )
-        assert deposit_receipt.edit != None
+        assert deposit_receipt.edit is not None
         dr = conn.complete_deposit(se_iri=deposit_receipt.se_iri)
         print(
             "This will fail until the sss.py SWORD2 server responds properly, rather than with code 201"
@@ -645,8 +645,8 @@ class TestConnection(TestController):
                 and item_dict.get("type", None) == "application/atom+xml;type=feed"
             ):
                 ss_iri = item_dict.get("href")
-        assert ss_iri != None
+        assert ss_iri is not None
         ss = conn.get_atom_sword_statement(ss_iri)
-        assert ss != None
+        assert ss is not None
         assert ss.resources[0].deposited_by == "sword"
         # assert ss.entries[0].metadata.get('sword_depositedBy') == 'sword'

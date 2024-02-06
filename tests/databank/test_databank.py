@@ -26,9 +26,9 @@ class TestConnection(TestController):
         # given that the client is fully functional, testing that the
         # service document parses and is valid is sufficient.  This, obviously,
         # doesn't test the validation routine itself.
-        assert conn.sd != None
-        assert conn.sd.parsed == True
-        assert conn.sd.valid == True
+        assert conn.sd is not None
+        assert conn.sd.parsed is True
+        assert conn.sd.valid is True
         assert len(conn.sd.workspaces) == 1
 
     def test_02_get_service_document_unauthorised(self):
@@ -141,12 +141,12 @@ class TestConnection(TestController):
         receipt = conn.create(col_iri=col.href, metadata_entry=e)
 
         assert receipt.code == 201
-        assert receipt.location != None
+        assert receipt.location is not None
 
         # these last two assertions are contingent on if we actually get a
         # receipt back from the server (which we might not legitimately get)
-        assert receipt.dom is None or receipt.parsed == True
-        assert receipt.dom is None or receipt.valid == True
+        assert receipt.dom is None or receipt.parsed is True
+        assert receipt.dom is None or receipt.valid is True
 
     def test_08_advanced_create_resource_with_entry(self):
         conn = Connection(
@@ -172,12 +172,12 @@ class TestConnection(TestController):
         )
 
         assert receipt.code == 201
-        assert receipt.location != None
+        assert receipt.location is not None
 
         # these last two assertions are contingent on if we actually get a
         # receipt back from the server (which we might not legitimately get)
-        assert receipt.dom is None or receipt.parsed == True
-        assert receipt.dom is None or receipt.valid == True
+        assert receipt.dom is None or receipt.parsed is True
+        assert receipt.dom is None or receipt.valid is True
 
     def test_09_basic_retrieve_deposit_receipt(self):
         conn = Connection(SSS_URL, user_name=SSS_UN, user_pass=SSS_PW)
@@ -192,13 +192,13 @@ class TestConnection(TestController):
         receipt = conn.create(col_iri=col.href, metadata_entry=e)
 
         # we're going to work with the location
-        assert receipt.location != None
+        assert receipt.location is not None
 
         new_receipt = conn.get_deposit_receipt(receipt.location)
 
         assert new_receipt.code == 200
-        assert new_receipt.parsed == True
-        assert new_receipt.valid == True
+        assert new_receipt.parsed is True
+        assert new_receipt.valid is True
 
     def test_10_advanced_retrieve_deposit_receipt(self):
         conn = Connection(
@@ -221,13 +221,13 @@ class TestConnection(TestController):
         )
 
         # we're going to work with the location
-        assert receipt.location != None
+        assert receipt.location is not None
 
         new_receipt = conn.get_deposit_receipt(receipt.location)
 
         assert new_receipt.code == 200
-        assert new_receipt.parsed == True
-        assert new_receipt.valid == True
+        assert new_receipt.parsed is True
+        assert new_receipt.valid is True
 
         print(new_receipt.to_xml())
 
@@ -848,7 +848,7 @@ class TestConnection(TestController):
         )
         receipt = conn.create(col_iri=col.href, metadata_entry=e)
         with open(PACKAGE) as pkg:
-            new_receipt = conn.update(
+            conn.update(
                 dr=receipt,
                 payload=pkg,
                 mimetype=PACKAGE_MIME,
@@ -947,7 +947,7 @@ class TestConnection(TestController):
         )
         receipt = conn.create(col_iri=col.href, metadata_entry=e)
         with open(PACKAGE) as pkg:
-            new_receipt = conn.update(
+            conn.update(
                 dr=receipt,
                 payload=pkg,
                 mimetype=PACKAGE_MIME,
@@ -971,7 +971,7 @@ class TestConnection(TestController):
         )
         receipt = conn.create(col_iri=col.href, metadata_entry=e)
         with open(PACKAGE) as pkg:
-            new_receipt = conn.update(
+            conn.update(
                 dr=receipt,
                 payload=pkg,
                 mimetype=PACKAGE_MIME,

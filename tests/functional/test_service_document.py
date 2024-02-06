@@ -8,8 +8,8 @@ from sword2 import ServiceDocument
 class TestSDCollection(TestController):
     def test_01_blank_init(self):
         c = SDCollection()
-        assert c.title == None
-        assert c.href == None
+        assert c.title is None
+        assert c.href is None
 
     def test_02_init(self):
         c = SDCollection(title="My test collection", href="http://example.org")
@@ -122,34 +122,34 @@ long_service_doc = """<?xml version="1.0" ?>
 class TestServiceDocument(TestController):
     def test_01_blank_init(self):
         s = ServiceDocument()
-        assert s.version == None
-        assert s.parsed == False
-        assert s.valid == False  # Invalid document as should be blank
+        assert s.version is None
+        assert s.parsed is False
+        assert s.valid is False  # Invalid document as should be blank
 
     def test_02_init_and_load_simple(self):
         s = ServiceDocument()
         s.load_document(short_service_doc)
         assert s.version == "2.0"
-        assert s.valid == True
+        assert s.valid is True
         assert s.maxUploadSize == 16777216  # check int()
 
     def test_03_load_on_init(self):
         s = ServiceDocument(xml_response=short_service_doc)
         assert s.version == "2.0"
-        assert s.valid == True
+        assert s.valid is True
         assert s.maxUploadSize == 16777216  # check int()
 
     def test_04_init_and_load_long(self):
         s = ServiceDocument()
         s.load_document(long_service_doc)
         assert s.version == "2.0"
-        assert s.valid == True
+        assert s.valid is True
         assert s.maxUploadSize == 16777216  # check int()
 
     def test_05_long_load_on_init(self):
         s = ServiceDocument(xml_response=long_service_doc)
         assert s.version == "2.0"
-        assert s.valid == True
+        assert s.valid is True
         assert s.maxUploadSize == 16777216  # check int()
 
     def test_06_workspaces_short(self):
@@ -174,10 +174,10 @@ class TestServiceDocument(TestController):
             if c.title == "Collection 44":
                 assert c.href == "http://swordapp.org/col-iri/44"
                 assert len(c.service) == 4
-                assert c.mediation == True
+                assert c.mediation is True
             if c.href == "http://swordapp.org/col-iri/46":
                 assert c.title == "Collection 46"
-                assert c.service == None
+                assert c.service is None
                 assert c.collectionPolicy == "Only Theses"
 
     def test_09_accept_information_long(self):
