@@ -2,14 +2,11 @@
 """
 Utility methods used within the module
 """
-from .sword2_logging import logging
-
-utils_l = logging.getLogger(__name__)
-
-from time import time
-from datetime import datetime
-
 from base64 import b64encode
+from datetime import datetime
+from time import time
+
+from .sword2_logging import logging
 
 try:
     from hashlib import md5
@@ -17,6 +14,8 @@ except ImportError:
     import md5
 
 import mimetypes
+
+utils_l = logging.getLogger(__name__)
 
 NS = {}
 NS["dcterms"] = "{http://purl.org/dc/terms/}%s"

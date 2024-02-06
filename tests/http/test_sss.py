@@ -1,3 +1,12 @@
+import atexit
+import os
+import subprocess
+import tempfile
+import urllib.error
+import urllib.parse
+import urllib.request
+from time import sleep
+
 from . import TestController
 from sword2 import Connection
 from sword2 import Entry
@@ -6,17 +15,6 @@ from sword2.exceptions import PackagingFormatNotAvailable
 # SSS_PY_URL="http://sword-app.svn.sourceforge.net/viewvc/sword-app/sss/trunk/sss.py?revision=HEAD"
 SSS_PY_URL = "https://raw.githubusercontent.com/OA-DeepGreen/Simple-Sword-Server/master/sss/sss-1.0.py"
 PORT_NUMBER = "8081"
-
-import subprocess
-import urllib.request
-import urllib.parse
-import urllib.error
-import tempfile
-import os
-
-import atexit
-
-from time import sleep
 
 long_service_doc = """<?xml version="1.0" ?>
 <service xmlns:dcterms="http://purl.org/dc/terms/"

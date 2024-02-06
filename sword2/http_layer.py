@@ -1,4 +1,10 @@
+import base64
 import json
+import urllib.error
+import urllib.parse
+import urllib.request
+
+import httplib2
 
 from .sword2_logging import logging
 
@@ -45,8 +51,6 @@ class HttpLayer:
 # Default httplib2 implementation
 ################################################################################
 
-import httplib2
-
 
 class HttpLib2Response(HttpResponse):
     def __init__(self, response):
@@ -87,11 +91,6 @@ class HttpLib2Layer(HttpLayer):
 ################################################################################
 # Guest urllib2 implementation
 ################################################################################
-
-import urllib.request
-import urllib.error
-import urllib.parse
-import base64
 
 
 class PreemptiveBasicAuthHandler(urllib.request.HTTPBasicAuthHandler):

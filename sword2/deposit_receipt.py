@@ -7,14 +7,13 @@ SWORD2-compliant server for many transactions.
 See Section 10. Deposit Receipt: http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/trunk/SWORDProfile.html?revision=HEAD#depositreceipt
 
 """
-from .sword2_logging import logging
-
-d_l = logging.getLogger(__name__)
+from lxml import etree
 
 from .atom_objects import Category
-
-from lxml import etree
+from .sword2_logging import logging
 from .utils import NS
+
+d_l = logging.getLogger(__name__)
 
 
 class Deposit_Receipt:

@@ -47,14 +47,14 @@ SWORD: Accept Packaging: '['http://purl.org/net/sword/package/SimpleZip', 'http:
 SWORD: Nested Service Documents - 'http://swordapp.org/sd-iri/e4'
 
 """
-from .sword2_logging import logging
-
-sd_l = logging.getLogger(__name__)
+from lxml import etree
 
 from .collection import SDCollection
+from .sword2_logging import logging
+from .utils import get_text
+from .utils import NS
 
-from lxml import etree
-from .utils import NS, get_text
+sd_l = logging.getLogger(__name__)
 
 
 class ServiceDocument:

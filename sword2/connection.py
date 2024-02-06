@@ -7,25 +7,30 @@ See http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/trunk/SWORDProfil
 about the SWORD2 AtomPub profile.
  
 """
-from .sword2_logging import logging
+import urllib.error
+import urllib.parse
+import urllib.request
 
-conn_l = logging.getLogger(__name__)
-
-from .utils import Timer, get_md5, create_multipart_related
-
-from .transaction_history import Transaction_History
-from .service_document import ServiceDocument
+from . import http_layer
 from .deposit_receipt import Deposit_Receipt
 from .error_document import Error_Document
-from .statement import Atom_Sword_Statement, Ore_Sword_Statement
-from .exceptions import *
+from .exceptions import Forbidden
+from .exceptions import HTTPResponseError
+from .exceptions import NotAcceptable
+from .exceptions import NotAuthorised
+from .exceptions import PackagingFormatNotAvailable
+from .exceptions import RequestTimeOut
+from .exceptions import ServerError
+from .service_document import ServiceDocument
+from .statement import Atom_Sword_Statement
+from .statement import Ore_Sword_Statement
+from .sword2_logging import logging
+from .transaction_history import Transaction_History
+from .utils import create_multipart_related
+from .utils import get_md5
+from .utils import Timer
 
-
-# import httplib2
-from . import http_layer
-import urllib.request
-import urllib.parse
-import urllib.error
+conn_l = logging.getLogger(__name__)
 
 
 class Connection:
@@ -116,7 +121,8 @@ class Connection:
     workspaces_found:   ['Main Site']
     process_duration:   0.00482511520386
 
-    Please see the testsuite for this class for more examples of the sorts of transactions that can be done. (tests/test_connection*.py)"""
+    Please see the testsuite for this class for more examples of the sorts of transactions that can be done. (tests/test_connection*.py)
+    """
 
     def __init__(
         self,
@@ -264,7 +270,8 @@ class Connection:
     def _return_error_or_exception(self, cls, resp, content):
         """Internal method for reporting errors, behaving as the `self.raise_except` flag requires.
 
-        `self.raise_except` can be altered at any time to affect this methods behaviour."""
+        `self.raise_except` can be altered at any time to affect this methods behaviour.
+        """
         if self.raise_except:
             raise cls(resp, content)
         else:

@@ -13,11 +13,12 @@ for the things they logically handle.
 """
 import json
 
+from .atom_objects import Category
 from .sword2_logging import logging
+from .utils import get_text
+from .utils import NS
 
 coll_l = logging.getLogger(__name__)
-
-from .utils import NS, get_text
 
 
 class SDCollection:

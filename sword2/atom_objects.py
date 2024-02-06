@@ -12,11 +12,9 @@ from lxml import etree
 
 from .implementation_info import __version__
 from .sword2_logging import logging
+from .utils import NS
 
 coll_l = logging.getLogger(__name__)
-
-
-from .utils import NS
 
 
 class Category:
@@ -49,7 +47,8 @@ class Category:
     def __init__(self, term=None, scheme=None, label=None, text=None, dom=None):
         """Init a `Category` class - 99% of the time, this will be done by setting the dom parameter.
 
-        However, if (for testing) there is a need to 'fake' a `Category`, all the attributes can be set in the constructor."""
+        However, if (for testing) there is a need to 'fake' a `Category`, all the attributes can be set in the constructor.
+        """
         self.term = term
         self.scheme = scheme
         self.label = label
@@ -159,7 +158,8 @@ class Entry:
         """Create a basic `Entry` document, setting the generator and a timestamp for the updated element value.
 
         Any keyword parameters passed in will be passed to the add_fields method and added to the entry
-        bootstrap document. It's currently not possible to add a namespace and use it within the init call."""
+        bootstrap document. It's currently not possible to add a namespace and use it within the init call.
+        """
 
         # create a namespace map which we'll use in all of the elements
         self.nsmap = {
@@ -176,7 +176,8 @@ class Entry:
     def register_namespace(self, prefix, uri):
         """Registers a namespace,, making it available for use when adding subsequent fields to the entry.
 
-        Registration will also affect the XML export, adding in the xmlns:prefix="url" attribute when required."""
+        Registration will also affect the XML export, adding in the xmlns:prefix="url" attribute when required.
+        """
         try:
             etree.register_namespace(prefix, uri)
         except AttributeError:
